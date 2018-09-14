@@ -1,0 +1,90 @@
+ireport工具类的功能
+
+********************************************打印导出*****************************************
+1.导出
+	使用方法：
+		1).新建类继承获取ireport填充数据的类AbstractGetIreportData，重写getIreportData方法，
+	其包含的返回数据有：
+		japser(japser文件名) *必须
+		fileName(生成文件名)	可选，不设置，则使用时间毫秒字符串为文件名
+		reportList(报表中list类型)		可选，主报表中有列表时使用
+		
+		2).在js中进行调用，分为两种调用：
+		-----------------------------------------------------
+		|	请求类型 		|	路径								|
+		-----------------------------------------------------
+		|	post		|	/commonExport/post/exportExcel	|
+		-----------------------------------------------------
+		|	get			|	/commonExport/get/exportExcel	|
+		-----------------------------------------------------
+		
+		js的调用方式：
+			post：
+				var parameters = {
+					className : 'expDataImpl'
+				}
+				parameters.japser = "test.jasper";
+				standardPost("/commonExport/post/exportExcel",parameters);
+				standardPost : function (url,args) {
+				    var form = $("<form method='post' target='_blank'></form>");
+				    form.attr({"action":url});
+				    var input = $("<input type='hidden'>");
+				    input.attr({"name":"parameters"});
+				    input.val(JSON.stringify(args));
+				    form.append(input);
+				    $("html").append(form);
+				    form.submit();
+				}
+			get：
+				window.open(encodeURI("/commonExport/post/exportExcel?parameters=" + JSON.stringify(parameters)));
+
+
+2.打印
+	使用方法：
+		1).新建类继承获取ireport填充数据的类AbstractGetIreportData，重写getIreportData方法，
+	其包含的返回数据有：
+		japser(japser文件名) *必须
+		fileName(生成文件名)	可选，不设置，则使用时间毫秒字符串为文件名
+		reportList(报表中list类型)		可选，主报表中有列表时使用
+		
+		2).在js中进行调用，分为两种调用：
+		-----------------------------------------------------
+		|	请求类型 		|	路径								|
+		-----------------------------------------------------
+		|	post		|	/commonPrint/post/printPDF	|
+		-----------------------------------------------------
+		|	get			|	/commonPrint/get/printPDF	|
+		-----------------------------------------------------
+		
+		js的调用方式：
+			post：
+				var parameters = {
+					className : 'expDataImpl'
+				}
+				parameters.japser = "test.jasper";
+				standardPost("/commonPrint/post/printPDF",parameters);
+				standardPost : function (url,args) {
+				    var form = $("<form method='post' target='_blank'></form>");
+				    form.attr({"action":url});
+				    var input = $("<input type='hidden'>");
+				    input.attr({"name":"parameters"});
+				    input.val(JSON.stringify(args));
+				    form.append(input);
+				    $("html").append(form);
+				    form.submit();
+				}
+			get：
+				window.open(encodeURI("/commonPrint/get/printPDF?parameters=" + JSON.stringify(parameters)));
+				
+		
+
+
+高级应用
+	
+	参数parameters:json对象
+		className(必选参数):获取ireport填充数据的bean名称，spring默认为类名首字母小写
+		methodName(可选参数):className中获取填充数据的方法名，形式为Map<String,Object> methodName(Map<String ,Object> params)
+					默认的方法名为：getIreportData，该参数为了能在一个类中获取不同模块的填充数据
+
+		
+********************************************************************************************************************		
